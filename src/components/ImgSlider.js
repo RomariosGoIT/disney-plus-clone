@@ -49,6 +49,14 @@ const Carousel = styled(Slider)`
     z-index: 1;
   }
 
+  button.slick-arrow {
+    opacity: 0;
+    transition-duration: 350ms;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   .slick-list {
     overflow: visible;
   }
