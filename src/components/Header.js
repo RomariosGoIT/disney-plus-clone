@@ -52,6 +52,9 @@ const Logo = styled.img`
 
 const NavMenu = styled.div`
   display: flex;
+  flex: 1;
+  margin-left: 20px;
+  align-items: center;
 
   a {
     display: flex;
@@ -63,9 +66,30 @@ const NavMenu = styled.div`
     }
 
     span {
+      position: relative;
       text-transform: uppercase;
       font-size: 13px;
       letter-spacing: 1.42px;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -6px;
+        height: 2px;
+        background-color: #fff;
+        opacity: 0;
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
+      }
+    }
+    &:hover {
+      span:after {
+        transform: scaleX(1);
+        opacity: 1;
+      }
     }
   }
 `;
@@ -74,4 +98,5 @@ const UserImg = styled.img`
   width: 48px;
   hight: 48px;
   border-radius: 50%;
+  cursor: pointer;
 `;
