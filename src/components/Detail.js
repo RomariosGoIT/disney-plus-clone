@@ -75,10 +75,9 @@ const ImageTitle = styled.div`
   min-height: 170px;
   width: 30%;
   min-width: 200px;
-  margin: 30px 0;
+  margin-top: 40px;
 
   img {
-    width: 100%;
     height: 100%;
     object-fit: contain;
   }
@@ -87,6 +86,7 @@ const ImageTitle = styled.div`
 const Controls = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 20px;
 `;
 
 const PlayBtn = styled.button`
@@ -102,6 +102,7 @@ const PlayBtn = styled.button`
   background: rgb(249, 249, 249);
   border: none;
   cursor: pointer;
+  transition: all 250ms;
   &:hover {
     background: rgb(198, 198, 198);
   }
@@ -146,4 +147,5 @@ const Description = styled.div`
   font-size: 20px;
   margin-top: 16px;
   color: rgb(249, 249, 249);
+  max-width: 760px;
 `;
