@@ -7,7 +7,7 @@ import db from '../firebase';
 
 function Home() {
   useEffect(() => {
-    db.collection('movies').onSnapshot(snapshot => {
+    db.collection('Movies').onSnapshot(snapshot => {
       console.log(snapshot);
     });
   }, []);
