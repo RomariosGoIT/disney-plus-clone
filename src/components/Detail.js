@@ -1,46 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import db from '../firebase';
 
 function Detail() {
+  const { id } = useParams();
+
+  const [movie, setMovie] = useState();
+
+  useEffect(() => {
+    // Grab the movie from DB
+    db.collection('Movies')
+      .doc(id)
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          setMovie(doc.data());
+        } else {
+          // redirect to home page
+        }
+      });
+  }, [id]);
+
   return (
     <Container>
-      <Background>
-        <img
-          alt="background"
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/9D8AEB7DE234898392BFD20E7D9B112B841E920AF9A3F54CCFB966722AFF3461/scale?width=1440&aspectRatio=1.78&format=jpeg"
-        />
-      </Background>
-      <ImageTitle>
-        <img
-          alt="title"
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/EF737B93E2F2ABE27C74CBBEB322F18A421E7986129E9989587CEF2295B0447F/scale?width=1440&aspectRatio=1.78&format=png"
-        />
-      </ImageTitle>
-      <Controls>
-        <PlayBtn>
-          <img alt="playBtn" src="/images/play-icon-black.png" />
-          <span>Play</span>
-        </PlayBtn>
-        <TrailerBtn>
-          <img alt="trailerBtn" src="/images/play-icon-white.png" />
-          <span>Trailer</span>
-        </TrailerBtn>
-        <AddBtn>
-          <span>+</span>
-        </AddBtn>
-        <GroupWatchBtn>
-          <img alt="GroupWatchBtn" src="/images/group-icon.png" />
-        </GroupWatchBtn>
-      </Controls>
-      <Subtitle>Bao is a Pixar Animation Studios short film that was released on June 15, 2018</Subtitle>
-      <Description>
-        In "Bao," an aging Chinese mom suffering from empty nest syndrome gets another chance at motherhood when one of
-        her dumplings springs to life as a lively, giggly dumpling boy. Mom excitedly welcomes this new bundle of joy
-        into her life, but Dumpling starts growing up fast, and Mom must come to the bittersweet revelation that nothing
-        stays cute and small forever. This short film from Pixar Animation Studios and director Domee Shi explores the
-        ups and downs of the parent-child relationship through the colorful, rich, and tasty lens of the Chinese
-        immigrant community in Canada.
-      </Description>
+      {movie && (
+        <>
+          <Background>
+            <img alt={movie.Title} src={movie.BackgroundImg} />
+          </Background>
+          <ImageTitle>
+            <img alt={movie.Title} src={movie.TitleImg} />
+          </ImageTitle>
+          <Controls>
+            <PlayBtn>
+              <img alt="playBtn" src="/images/play-icon-black.png" />
+              <span>Play</span>
+            </PlayBtn>
+            <TrailerBtn>
+              <img alt="trailerBtn" src="/images/play-icon-white.png" />
+              <span>Trailer</span>
+            </TrailerBtn>
+            <AddBtn>
+              <span>+</span>
+            </AddBtn>
+            <GroupWatchBtn>
+              <img alt="GroupWatchBtn" src="/images/group-icon.png" />
+            </GroupWatchBtn>
+          </Controls>
+          <Subtitle>{movie.Genres}</Subtitle>
+          <Description>{movie.Description}</Description>
+        </>
+      )}
     </Container>
   );
 }
