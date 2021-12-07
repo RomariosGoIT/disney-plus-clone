@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { auth, provider } from '../firebase';
@@ -7,13 +7,29 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Header() {
   const dispatch = useDispatch();
-
   // const userName = true;
   // const userPhoto = useSelector(selectUserPhoto);
-
   const navigate = useNavigate();
-
   const userName = useSelector(selectUserName);
+  console.log(auth);
+
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(async user => {
+  //     if (user) {
+  //       console.log(user);
+  //       dispatch(
+  //         setUserLogin({
+  //           name: user.displayName,
+  //           email: user.email,
+  //           photo: user.photoURL,
+  //         }),
+  //         navigate('/'),
+  //       );
+  //     } else {
+  //       console.log('ERROR');
+  //     }
+  //   }, []);
+  // });
 
   const signIn = () => {
     auth.signInWithPopup(provider).then(res => {
