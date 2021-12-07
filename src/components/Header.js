@@ -2,54 +2,50 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { auth, provider } from '../firebase';
-import { selectUserName, setUserLogin, setSignOut } from '../features/user/userSlice';
+import { selectUserName, selectUserPhoto, setUserLogin, setSignOut } from '../features/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Header() {
   const dispatch = useDispatch();
-  // const userName = true;
-  // const userPhoto = useSelector(selectUserPhoto);
+  const userPhoto = useSelector(selectUserPhoto);
   const navigate = useNavigate();
   const userName = useSelector(selectUserName);
-  console.log(auth);
 
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(async user => {
-  //     if (user) {
-  //       console.log(user);
-  //       dispatch(
-  //         setUserLogin({
-  //           name: user.displayName,
-  //           email: user.email,
-  //           photo: user.photoURL,
-  //         }),
-  //         navigate('/'),
-  //       );
-  //     } else {
-  //       console.log('ERROR');
-  //     }
-  //   }, []);
-  // });
-
-  const signIn = () => {
-    auth.signInWithPopup(provider).then(res => {
-      let user = res.user;
-      dispatch(
-        setUserLogin({
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL,
-        }),
-      );
-      navigate('/');
-    });
+  const setUser = user => {
+    dispatch(
+      setUserLogin({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      }),
+    );
   };
 
-  const signOut = () => {
-    auth.signOut().then(() => {
-      dispatch(setSignOut);
-      navigate('/login');
+  useEffect(() => {
+    auth.onAuthStateChanged(async user => {
+      if (user) {
+        setUser(user);
+        navigate('/');
+      }
     });
+  }, []);
+
+  const handleAuth = () => {
+    if (!userName) {
+      auth
+        .signInWithPopup(provider)
+        .then(res => {
+          setUser(res.user);
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+    } else if (userName) {
+      auth.signOut().then(() => {
+        dispatch(setSignOut());
+        navigate('/login');
+      });
+    }
   };
 
   return (
@@ -57,7 +53,7 @@ function Header() {
       <Logo src="/images/logo.svg" />
       {!userName ? (
         <LoginContainer>
-          <Login onClick={signIn}>Login</Login>
+          <Login onClick={handleAuth}>Login</Login>
         </LoginContainer>
       ) : (
         <>
@@ -87,10 +83,7 @@ function Header() {
               <span>Series</span>
             </a>
           </NavMenu>
-          <UserImg
-            onClick={signOut}
-            src="https://lh3.googleusercontent.com/ogw/ADea4I7zzZwBPoP_YJGMFvpfkwn4kMzsMbwd_FYMJwuGgg=s32-c-mo"
-          />
+          <UserImg onClick={handleAuth} src={userPhoto} alt={userName} />
         </>
       )}
     </Nav>
